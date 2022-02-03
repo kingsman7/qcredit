@@ -1,0 +1,165 @@
+<template>
+  <div id="walletPage">
+    <!--Page actions-->
+    <div class="box box-auto-height q-mb-md">
+      <page-actions icon="fas fa-wallet" :title="$tr('qcredit.layout.label.wallet')" ref="pageActions"
+                    :extra-actions="extraPageActions" @refresh="getSummary(true)"/>
+    </div>
+    <!--Amount Available-->
+    <div class="row q-col-gutter-x-md">
+      <!--Available-->
+      <div class="col-12 col-sm-4">
+        <div class="box box-auto-height q-mb-md bg-blue text-white">
+          <div class="text-weight-bold">{{ `✔ ${this.$tr('ui.label.available')}` }}</div>
+          {{ $trn(this.summary.amount) }}
+        </div>
+      </div>
+      <!--in-->
+      <div class="col-12 col-sm-4">
+        <div class="box box-auto-height q-mb-md bg-green text-white">
+          <div class="text-weight-bold">{{ `▲ ${this.$tr('ui.label.inbound')}` }}</div>
+          {{ $trn(this.summary.amountIn) }}
+        </div>
+      </div>
+      <!--Out-->
+      <div class="col-12 col-sm-4">
+        <div class="box box-auto-height q-mb-md bg-red-4 text-white">
+          <div class="text-weight-bold">{{ `▼ ${this.$tr('ui.label.outbound')}` }}</div>
+          {{ $trn(this.summary.amountOut) }}
+        </div>
+      </div>
+    </div>
+    <!--Credits-->
+    <crud :crud-data="import('@imagina/qcredit/_crud/wallet')"/>
+    <!--Modal to withdrawal-->
+    <master-modal v-model="modal.show" v-bind="modalConfig.props">
+      <div class="box box-auto-height">
+        <!--Amount Field-->
+        <dynamic-field v-model="modal.amount" :field="modalConfig.amountField"
+                       v-if="modalConfig.amountAvailable"/>
+        <!--Message not amount-->
+        <div v-else class="text-red-4">
+          {{ $tr('qcredit.layout.message.notAmountAvailable') }}...
+        </div>
+      </div>
+    </master-modal>
+  </div>
+</template>
+
+<script>
+export default {
+  mounted() {
+    this.$nextTick(function () {
+      this.init()
+    })
+  },
+  data() {
+    return {
+      summary: {amount: 0, amountIn: 0, amountOut: 0},
+      customerId: this.$store.state.quserAuth.userId,
+      modal: {
+        loading: false,
+        show: false,
+        amount: null
+      }
+    }
+  },
+  computed: {
+    //Extra Page actions
+    extraPageActions() {
+      return [
+        {
+          props: {
+            label: this.$tr(`qcredit.layout.label.withdrawal`),
+            rounded: true,
+            round: false,
+            color: 'green',
+            padding: '3px 15px'
+          },
+          action: () => {
+            this.modal.show = true
+          }
+        },
+      ]
+    },
+    //Modal props
+    modalConfig() {
+      //Cantidad disponible
+      let amountAvailable = parseFloat(this.summary.amount) > 0 ? true : false
+
+      return {
+        amountAvailable: amountAvailable,
+        props: {
+          title: this.$tr(`qcredit.layout.label.withdrawal`),
+          loading: this.modal.loading,
+          actions: !amountAvailable ? [] : [
+            {
+              props: {
+                label: this.$tr('ui.label.send'),
+                color: 'green'
+              },
+              action: this.withdraw
+            },
+          ]
+        },
+        amountField: {
+          value: null,
+          type: 'input',
+          props: {
+            label: this.$tr('ui.label.amount'),
+            type: 'number'
+          }
+        }
+      }
+    }
+  },
+  methods: {
+    //init
+    async init() {
+      this.getSummary()
+    },
+    //Get Amount available
+    getSummary(refresh = false) {
+      return new Promise(resolve => {
+        //Request params
+        let requestParams = {
+          refresh: refresh,
+          params: {filter: {customerId: this.customerId, amountAvailable: true}}
+        }
+        //Request
+        this.$crud.index('/icredit/v1/credits', requestParams).then(response => {
+          if (response.data.length) this.summary = response.data[0]
+          resolve(resolve.data)
+        }).catch(err => resolve(false))
+      })
+    },
+    //withdraw
+    withdraw() {
+      let amountAvailable = parseFloat(this.summary.amount)
+      //Validate Value
+      if (this.modal.amount < 0 || this.modal.amount > amountAvailable) {
+        this.$alert.warning(this.$tr('qcredit.layout.message.invalidAmount'))
+      } else {
+        this.modal.loading = true
+        //Request data
+        let requestData = {
+          amount: this.modal.amount
+        }
+        //Request
+        this.$crud.create('apiRoutes.qcredit.withdrawalFunds', requestData).then(response => {
+          this.$alert.info({message: `${this.$tr('ui.message.recordCreated')}`})
+          this.modal = {loading: false, show: false, amount: null}
+          this.$refs.pageActions.emitRefresh()
+        }).catch(error => {
+          this.$alert.error({message: `${this.$tr('ui.message.recordNoCreated')}`})
+          this.modal.loading = false
+        })
+      }
+    }
+  }
+}
+</script>
+
+<style scoped>
+
+</style>
