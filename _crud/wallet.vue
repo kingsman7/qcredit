@@ -22,7 +22,7 @@ export default {
               format: val => `${val.includes("-") ? '▼' : '▲'} ${this.$trn(val)}`,
               classes: row => row.amount.includes("-") ? "text-red-4" : "text-green"
             },
-            //{name: 'statusName', label: this.$tr('ui.form.status'), field: 'statusName', align: 'left'},
+            {name: 'statusName', label: this.$tr('ui.form.status'), field: 'statusName', align: 'left'},
             {
               name: 'description', label: this.$tr('ui.form.description'), field: 'description',
               classes: 'ellipsis', style: 'max-width : 250px', format: val => val || '-', align: 'left'

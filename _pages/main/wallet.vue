@@ -10,24 +10,43 @@
     <!--Amount Available-->
     <div class="row q-col-gutter-x-md">
       <!--Available-->
-      <div class="col-12 col-sm-4">
+      <div class="col-6 col-sm-3">
         <div class="box box-auto-height q-mb-md bg-blue text-white">
-          <div class="text-weight-bold">{{ `✔ ${this.$tr('ui.label.available')}` }}</div>
+          <div class="text-weight-bold">
+            <q-icon name="fas fa-dollar-sign"/>
+            {{ this.$tr('ui.label.available') }}
+          </div>
           {{ $trn(this.summary.amount) }}
         </div>
       </div>
       <!--in-->
-      <div class="col-12 col-sm-4">
+      <div class="col-6 col-sm-3">
         <div class="box box-auto-height q-mb-md bg-green text-white">
-          <div class="text-weight-bold">{{ `▲ ${this.$tr('ui.label.inbound')}` }}</div>
+          <div class="text-weight-bold">
+            <q-icon name="fas fa-caret-up"/>
+            {{ this.$tr('ui.label.inbound') }}
+          </div>
           {{ $trn(this.summary.amountIn) }}
         </div>
       </div>
       <!--Out-->
-      <div class="col-12 col-sm-4">
+      <div class="col-6 col-sm-3">
         <div class="box box-auto-height q-mb-md bg-red-4 text-white">
-          <div class="text-weight-bold">{{ `▼ ${this.$tr('ui.label.outbound')}` }}</div>
+          <div class="text-weight-bold">
+            <q-icon name="fas fa-caret-down"/>
+            {{ this.$tr('ui.label.outbound') }}
+          </div>
           {{ $trn(this.summary.amountOut) }}
+        </div>
+      </div>
+      <!--Pending-->
+      <div class="col-6 col-sm-3">
+        <div class="box box-auto-height q-mb-md bg-amber text-white">
+          <div class="text-weight-bold">
+            <q-icon name="fas fa-history"/>
+            {{this.$tr('ui.label.pending')}}
+          </div>
+          {{ $trn(this.summary.amountPending) }}
         </div>
       </div>
     </div>
@@ -63,7 +82,7 @@ export default {
   },
   data() {
     return {
-      summary: {amount: 0, amountIn: 0, amountOut: 0},
+      summary: {amount: 0, amountIn: 0, amountOut: 0, amountPending: 0},
       customerId: this.$store.state.quserAuth.userId,
       modal: {
         loading: false,
@@ -136,7 +155,12 @@ export default {
         }
         //Request
         this.$crud.index('/icredit/v1/credits', requestParams).then(response => {
-          this.summary = response.data.length ? response.data[0] : {amount: 0, amountIn: 0, amountOut: 0}
+          this.summary = response.data.length ? response.data[0] : {
+            amount: 0,
+            amountIn: 0,
+            amountOut: 0,
+            amountPending: 0
+          }
           resolve(resolve.data)
         }).catch(err => resolve(false))
       })
