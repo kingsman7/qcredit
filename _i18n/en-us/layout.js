@@ -6,6 +6,7 @@ export default {
   },
   message: {
     notAmountAvailable: 'No amount available',
-    invalidAmount: 'The value entered for withdrawal is not valid'
+    invalidAmount: 'The value entered for withdrawal is not valid',
+    showPanel : 'Show Panel'
   }
 }

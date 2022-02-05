@@ -3,8 +3,10 @@
     <!--Page actions-->
     <div class="box box-auto-height q-mb-md">
       <page-actions icon="fas fa-wallet" :title="$tr('qcredit.layout.label.wallet')" ref="pageActions"
-                    :extra-actions="extraPageActions" @refresh="getSummary(true)"/>
+                    :extra-actions="extraPageActions" @refresh="getSummary(true); $refs.payoutConfig.loadPage()"/>
     </div>
+    <!--payout config-->
+    <payout-config class="q-mb-md" ref="payoutConfig"/>
     <!--Amount Available-->
     <div class="row q-col-gutter-x-md">
       <!--Available-->
@@ -47,7 +49,13 @@
 </template>
 
 <script>
+//Components
+import payoutConfig from '@imagina/qcredit/_components/payout'
+
 export default {
+  props: {},
+  components: {payoutConfig},
+  watch: {},
   mounted() {
     this.$nextTick(function () {
       this.init()
@@ -128,7 +136,7 @@ export default {
         }
         //Request
         this.$crud.index('/icredit/v1/credits', requestParams).then(response => {
-          if (response.data.length) this.summary = response.data[0]
+          this.summary = response.data.length ? response.data[0] : {amount: 0, amountIn: 0, amountOut: 0}
           resolve(resolve.data)
         }).catch(err => resolve(false))
       })
@@ -151,7 +159,6 @@ export default {
           this.modal = {loading: false, show: false, amount: null}
           this.$refs.pageActions.emitRefresh()
         }).catch(error => {
-          this.$alert.error({message: `${this.$tr('ui.message.recordNoCreated')}`})
           this.modal.loading = false
         })
       }
