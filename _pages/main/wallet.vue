@@ -69,7 +69,7 @@
 
 <script>
 //Components
-import payoutConfig from '@imagina/qcredit/_components/payout'
+import payoutConfig from '@imagina/qcommerce/_components/payout'
 
 export default {
   props: {},
