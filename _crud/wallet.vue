@@ -16,23 +16,23 @@ export default {
         read: {
           hideHeader: true,
           columns: [
-            {name: 'id', label: this.$tr('ui.form.id'), field: 'id', align: 'left'},
+            {name: 'id', label: this.$tr('isite.cms.form.id'), field: 'id', align: 'left'},
             {
-              name: 'amount', label: this.$tr('ui.label.amount'), field: 'amount', align: 'left',
+              name: 'amount', label: this.$tr('isite.cms.label.amount'), field: 'amount', align: 'left',
               format: val => `${val.includes("-") ? '▼' : '▲'} ${this.$trn(val)}`,
               classes: row => row.amount.includes("-") ? "text-red-4" : "text-green"
             },
-            {name: 'statusName', label: this.$tr('ui.form.status'), field: 'statusName', align: 'left'},
+            {name: 'statusName', label: this.$tr('isite.cms.form.status'), field: 'statusName', align: 'left'},
             {
-              name: 'description', label: this.$tr('ui.form.description'), field: 'description',
+              name: 'description', label: this.$tr('isite.cms.form.description'), field: 'description',
               classes: 'ellipsis', style: 'max-width : 250px', format: val => val || '-', align: 'left'
             },
             {
-              name: 'created_at', label: this.$tr('ui.form.createdAt'), field: 'createdAt', align: 'right',
+              name: 'created_at', label: this.$tr('isite.cms.form.createdAt'), field: 'createdAt', align: 'right',
               format: val => val ? this.$trd(val, {type: 'long'}) : '-',
             },
             {
-              name: 'updated_at', label: this.$tr('ui.form.updatedAt'), field: 'updatedAt', align: 'right',
+              name: 'updated_at', label: this.$tr('isite.cms.form.updatedAt'), field: 'updatedAt', align: 'right',
               format: val => val ? this.$trd(val, {type: 'long'}) : '-',
             },
           ],

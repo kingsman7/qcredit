@@ -2,7 +2,7 @@
   <div id="walletPage">
     <!--Page actions-->
     <div class="box box-auto-height q-mb-md">
-      <page-actions icon="fas fa-wallet" :title="$tr('qcredit.layout.label.wallet')" ref="pageActions"
+      <page-actions icon="fas fa-wallet" :title="$tr('icredit.cms.label.wallet')" ref="pageActions"
                     :extra-actions="extraPageActions" @refresh="getSummary(true); $refs.payoutConfig.loadPage()"/>
     </div>
     <!--payout config-->
@@ -14,7 +14,7 @@
         <div class="box box-auto-height q-mb-md bg-blue text-white">
           <div class="text-weight-bold">
             <q-icon name="fas fa-dollar-sign"/>
-            {{ this.$tr('ui.label.available') }}
+            {{ this.$tr('isite.cms.label.available') }}
           </div>
           {{ $trn(this.summary.amount) }}
         </div>
@@ -24,7 +24,7 @@
         <div class="box box-auto-height q-mb-md bg-green text-white">
           <div class="text-weight-bold">
             <q-icon name="fas fa-caret-up"/>
-            {{ this.$tr('ui.label.inbound') }}
+            {{ this.$tr('isite.cms.label.inbound') }}
           </div>
           {{ $trn(this.summary.amountIn) }}
         </div>
@@ -34,7 +34,7 @@
         <div class="box box-auto-height q-mb-md bg-red-4 text-white">
           <div class="text-weight-bold">
             <q-icon name="fas fa-caret-down"/>
-            {{ this.$tr('ui.label.outbound') }}
+            {{ this.$tr('isite.cms.label.outbound') }}
           </div>
           {{ $trn(this.summary.amountOut) }}
         </div>
@@ -44,7 +44,7 @@
         <div class="box box-auto-height q-mb-md bg-amber text-white">
           <div class="text-weight-bold">
             <q-icon name="fas fa-history"/>
-            {{this.$tr('ui.label.pending')}}
+            {{this.$tr('isite.cms.label.pending')}}
           </div>
           {{ $trn(this.summary.amountPending) }}
         </div>
@@ -60,7 +60,7 @@
                        v-if="modalConfig.amountAvailable"/>
         <!--Message not amount-->
         <div v-else class="text-red-4">
-          {{ $tr('qcredit.layout.message.notAmountAvailable') }}...
+          {{ $tr('icredit.cms.message.notAmountAvailable') }}...
         </div>
       </div>
     </master-modal>
@@ -97,7 +97,7 @@ export default {
       return [
         {
           props: {
-            label: this.$tr(`qcredit.layout.label.withdrawal`),
+            label: this.$tr(`icredit.cms.label.withdrawal`),
             rounded: true,
             round: false,
             color: 'green',
@@ -117,12 +117,12 @@ export default {
       return {
         amountAvailable: amountAvailable,
         props: {
-          title: this.$tr(`qcredit.layout.label.withdrawal`),
+          title: this.$tr(`icredit.cms.label.withdrawal`),
           loading: this.modal.loading,
           actions: !amountAvailable ? [] : [
             {
               props: {
-                label: this.$tr('ui.label.send'),
+                label: this.$tr('isite.cms.label.send'),
                 color: 'green'
               },
               action: this.withdraw
@@ -133,7 +133,7 @@ export default {
           value: null,
           type: 'input',
           props: {
-            label: this.$tr('ui.label.amount'),
+            label: this.$tr('isite.cms.label.amount'),
             type: 'number'
           }
         }
@@ -170,7 +170,7 @@ export default {
       let amountAvailable = parseFloat(this.summary.amount)
       //Validate Value
       if (this.modal.amount < 0 || this.modal.amount > amountAvailable) {
-        this.$alert.warning(this.$tr('qcredit.layout.message.invalidAmount'))
+        this.$alert.warning(this.$tr('icredit.cms.message.invalidAmount'))
       } else {
         this.modal.loading = true
         //Request data
@@ -179,7 +179,7 @@ export default {
         }
         //Request
         this.$crud.create('apiRoutes.qcredit.withdrawalFunds', requestData).then(response => {
-          this.$alert.info({message: `${this.$tr('ui.message.recordCreated')}`})
+          this.$alert.info({message: `${this.$tr('isite.cms.message.recordCreated')}`})
           this.modal = {loading: false, show: false, amount: null}
           this.$refs.pageActions.emitRefresh()
         }).catch(error => {

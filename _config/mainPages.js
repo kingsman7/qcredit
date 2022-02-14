@@ -7,7 +7,7 @@ export default {
     name: 'qcredit.main.credits.index',
     page: () => import('@imagina/qcredit/_pages/main/wallet'),
     layout: () => import('@imagina/qsite/_layouts/master.vue'),
-    title: 'qcredit.sidebar.adminWallet',
+    title: 'icredit.cms.sidebar.adminWallet',
     icon: 'fas fa-wallet',
     authenticated: true,
     subHeader: {refresh: true}
