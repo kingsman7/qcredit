@@ -1,0 +1,126 @@
+{
+  "crudId": "icredit-crud-wallet",
+  "entityName": "",
+  "apiRoute": "/icredit/v1/credits",
+  "permission": "",
+  "extraFormFields": "",
+  "create": false,
+  "read": {
+    "hideHeader": true,
+    "columns": [
+      {
+        "name": "id",
+        "label": {
+          "isTranslatable": "singular",
+          "value": "isite.cms.form.id"
+        },
+        "field": "id",
+        "align": "left",
+        "sortable": false
+      },
+      {
+        "align": "left",
+        "name": "amount",
+        "label": {
+          "isTranslatable": "singular",
+          "value": "isite.cms.label.amount"
+        },
+        "field": "amount",
+        "sortable": false,
+        "style": "",
+        "classes": {
+          "type":"conditional",
+          "method": "includes",
+          "child":"amount",
+          "value": "-",
+          "yes": "text-red-4",
+          "no": "text-green"
+        },
+        "format":{
+          "type":"concat number",
+          "isVal": {
+            "method": "includes",
+            "value": "-",
+            "yes":"▼",
+            "no":"▲"
+          }
+        }
+      },
+      {
+        "name": "statusName",
+        "label": {
+          "isTranslatable": "singular",
+          "value": "isite.cms.form.status"
+        },
+        "field": "statusName",
+        "sortable": false,
+        "style": "",
+        "align": "left",
+        "classes": {
+          "value": "text-weight-bold",
+          "child": "status"
+        }
+      },
+      {
+        "name": "description",
+        "label": {
+          "isTranslatable": "singular",
+          "value": "isite.cms.form.description"
+        },
+        "field": "description",
+        "sortable": false,
+        "align": "left",
+        "style": "max-width : 250px",
+        "classes": "ellipsis",
+        "format":{
+          "type":"str"
+        }
+      },
+      {
+        "name": "created_at",
+        "label": {
+          "isTranslatable": "singular",
+          "value": "isite.cms.form.createdAt"
+        },
+        "field": "createdAt",
+        "sortable": false,
+        "align": "right",
+        "format":{
+          "type":"date",
+          "includes": {
+            "type":"long"
+          }
+        }
+      },
+      {
+        "name": "updated_at",
+        "label": {
+          "isTranslatable": "singular",
+          "value": "isite.cms.form.updatedAt"
+        },
+        "field": "updatedAt",
+        "sortable": false,
+        "align": "right",
+        "format":{
+          "type":"date",
+          "includes": {
+            "type":"long"
+          }
+        }
+      }
+    ],
+    "requestParams": {
+      "filter": {
+        "value":"str",
+        "allTranslations": true,
+        "filter": {
+          "filterName":"customerId",
+          "storeName": "quserAuth",
+          "child": "userId"
+        }
+      }
+    }
+  },
+  "update": false,
+  "delete": true
+}

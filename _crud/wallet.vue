@@ -1,7 +1,13 @@
 <template>
+  <config-crud ref="configCrud" />
 </template>
 <script>
+import configCrud from "@imagina/qcrud/_config/CrudConfig"
+import Json from "@imagina/qcredit/_crud/wallet.json"
 export default {
+  components:{
+    configCrud
+  },
   data() {
     return {
       crudId: this.$uid(),
@@ -10,7 +16,8 @@ export default {
   computed: {
     crudData() {
       return {
-        crudId: this.crudId,
+        ...this.$refs.configCrud.getData(Json)
+        /*crudId: this.crudId,
         apiRoute: 'apiRoutes.qcredit.credits',
         create: false,
         read: {
@@ -43,7 +50,7 @@ export default {
           }
         },
         update: false,
-        delete: false
+        delete: false*/
       }
     }
   },
